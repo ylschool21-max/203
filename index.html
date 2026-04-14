@@ -65,9 +65,26 @@
         .custom-shape-divider-bottom-1683210000 .shape-fill {
             fill: #FFFFFF;
         }
+
+        /* 네비게이션 바 스타일 */
+        .nav-glass {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px border-dashed rgba(255, 255, 255, 0.3);
+        }
     </style>
 </head>
 <body class="text-gray-800">
+
+    <!-- 상단 네비게이션 바 -->
+    <nav class="fixed top-0 left-0 w-full z-50 p-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="https://ylschool21-max.github.io/001/" class="bg-white/80 hover:bg-white text-blue-500 font-bold py-2 px-6 rounded-full shadow-lg border-2 border-blue-200 transition-all transform hover:scale-105 active:scale-95 flex items-center gap-2">
+                <span class="text-xl">🏫</span>
+                <span>영일유치원</span>
+            </a>
+        </div>
+    </nav>
 
     <!-- Header & Hero Section -->
     <section class="relative h-screen flex flex-col items-center justify-center text-center hero-gradient px-4 overflow-hidden">
