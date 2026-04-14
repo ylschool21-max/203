@@ -60,8 +60,12 @@
             position: absolute;
             top: 20px;
             left: 20px;
+            right: 20px;
             z-index: 10;
             pointer-events: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
         }
         .stats-card {
             background: rgba(15, 23, 42, 0.8);
@@ -71,6 +75,25 @@
             color: white;
             border: 1px solid rgba(56, 189, 248, 0.3);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+        .home-btn {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            pointer-events: auto;
+            transition: all 0.2s;
+        }
+        .home-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
         }
         #game-overlay {
             position: absolute;
@@ -129,6 +152,11 @@
             <div class="text-xs opacity-60 mt-3 uppercase tracking-wider">Remaining Time</div>
             <div id="timer" class="text-2xl font-mono font-bold text-white">60s</div>
         </div>
+        
+        <!-- 홈 버튼 추가 -->
+        <a href="../index.html" class="home-btn" title="홈으로 이동">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+        </a>
     </div>
 
     <div id="game-overlay">
@@ -182,7 +210,7 @@
     // TTS 기능
     async function speak(text) {
         try {
-            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`, {
+            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -236,7 +264,6 @@
         constructor() {
             this.x = Math.random() * canvasElement.width;
             this.y = -50;
-            // 빗방울과 쓰레기 등장 확률 조정
             this.isTrash = Math.random() > 0.4; 
             this.symbol = this.isTrash ? TRASH[Math.floor(Math.random() * TRASH.length)] : RAINDROPS[Math.floor(Math.random() * RAINDROPS.length)];
             this.speed = this.isTrash ? (2 + Math.random() * 3) : (5 + Math.random() * 5); 
@@ -259,11 +286,10 @@
             ctx.rotate(this.rotation);
             
             if (this.isTrash) {
-                // 쓰레기 강조 효과
                 ctx.shadowBlur = 8;
                 ctx.shadowColor = 'rgba(255, 255, 255, 0.3)';
             } else {
-                ctx.globalAlpha = 0.7; // 빗방울은 조금 투명하게
+                ctx.globalAlpha = 0.7;
             }
             
             ctx.font = `${this.size}px Arial`;
@@ -310,7 +336,6 @@
                 y: landmark.y * canvasElement.height
             };
 
-            // 청소 도구 모양 피드백
             canvasCtx.beginPath();
             canvasCtx.arc(lastHandPos.x, lastHandPos.y, 45, 0, Math.PI * 2);
             canvasCtx.fillStyle = 'rgba(16, 185, 129, 0.2)';
@@ -318,8 +343,6 @@
             canvasCtx.strokeStyle = 'rgba(16, 185, 129, 0.8)';
             canvasCtx.lineWidth = 3;
             canvasCtx.stroke();
-            
-            // "Catch!" 텍스트 효과 (선택적)
         } else {
             lastHandPos = null;
         }
@@ -333,11 +356,9 @@
 
                 if (lastHandPos && item.checkCollision(lastHandPos.x, lastHandPos.y)) {
                     if (item.isTrash) {
-                        // 요청사항: 쓰레기를 잡으면 점수 획득
                         score++;
                         updateGarden(score);
                     } else {
-                        // 빗방울을 잡으면 감점
                         score = Math.max(0, score - 1);
                         updateGarden(score);
                     }
